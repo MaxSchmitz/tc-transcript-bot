@@ -38,12 +38,31 @@ imsg watch --participants "$WATCH_NUMBER" --json | while IFS= read -r msg; do
 
   log "Received: $TEXT"
 
-  RESPONSE=$( cd "$PROJECT_DIR" && "$CLAUDE_BIN" -p "$TEXT" --dangerously-skip-permissions --output-format text 2>&1 ) || true
+  START_TIME=$(date +%s)
+  log "Starting claude -p..."
+
+  RESPONSE=$( cd "$PROJECT_DIR" && "$CLAUDE_BIN" -p "$TEXT" \
+    --dangerously-skip-permissions --output-format text --verbose \
+    2>>"$LOG_DIR/claude-verbose.log" < /dev/null ) || true
+  END_TIME=$(date +%s)
+  ELAPSED=$(( END_TIME - START_TIME ))
 
   if [ -z "$RESPONSE" ]; then
     RESPONSE="Something went wrong processing that. Check the logs."
+    log "ERROR: Empty response after ${ELAPSED}s"
+  else
+    log "Success in ${ELAPSED}s"
   fi
 
-  log "Responding: $RESPONSE"
+  # Full response log
+  {
+    echo "=== $(date '+%Y-%m-%d %H:%M:%S') ==="
+    echo "URL: $TEXT"
+    echo "Duration: ${ELAPSED}s"
+    echo "$RESPONSE"
+    echo ""
+  } >> "$LOG_DIR/responses.log"
+
+  log "Responding (${#RESPONSE} chars, ${ELAPSED}s): ${RESPONSE:0:200}"
   imsg send --to "$WATCH_NUMBER" --text "$RESPONSE"
 done

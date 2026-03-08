@@ -34,7 +34,7 @@ If it fails, tell the user to grant Full Disk Access:
 
 Ask the user for:
 - **Phone number or iMessage email** to watch for incoming messages (E.164 format, e.g. +15551234567)
-- **Deepgram API key** (from deepgram.com -- free tier works)
+- **OpenAI API key** (from platform.openai.com -- free tier works)
 - **Instagram credentials** (optional, for auto-login when cookies expire)
 - **Google Drive transcript folder path** (default: `~/Google Drive/My Drive/TC Transcripts`)
 
@@ -50,7 +50,7 @@ Write a `.env` file in the project root:
 TC_WATCH_NUMBER="<phone or email>"
 TC_PROJECT_DIR="<absolute path to this project>"
 CLAUDE_BIN="<output of which claude>"
-DEEPGRAM_API_KEY="<key>"
+OPENAI_API_KEY="<key>"
 INSTAGRAM_USER="<username or blank>"
 INSTAGRAM_PASS="<password or blank>"
 GDRIVE_TRANSCRIPT_DIR="<path to transcript folder>"

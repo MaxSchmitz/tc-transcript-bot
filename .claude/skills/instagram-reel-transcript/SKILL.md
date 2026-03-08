@@ -34,18 +34,18 @@ If the Reel is private or unavailable, reply: "That Reel is private or has been 
 ffmpeg -i /tmp/reel_{id}.mp4 -vn -ac 1 -ar 16000 -f wav /tmp/reel_{id}.wav -y
 ```
 
-## 3. Transcribe with Deepgram
+## 3. Transcribe with OpenAI Whisper
 
-POST the WAV file to Deepgram nova-2:
+POST the WAV file to the OpenAI Whisper API:
 
 ```bash
-curl -s -X POST "https://api.deepgram.com/v1/listen?model=nova-2&smart_format=true" \
-  -H "Authorization: Token $DEEPGRAM_API_KEY" \
-  -H "Content-Type: audio/wav" \
-  --data-binary @/tmp/reel_{id}.wav
+curl -s -X POST "https://api.openai.com/v1/audio/transcriptions" \
+  -H "Authorization: Bearer $OPENAI_API_KEY" \
+  -F "file=@/tmp/reel_{id}.wav" \
+  -F "model=whisper-1"
 ```
 
-Extract the transcript from `.results.channels[0].alternatives[0].transcript` in the JSON response.
+Extract the transcript from the `text` field in the JSON response.
 
 Preserve the transcript verbatim. Never edit, summarize, clean up filler words, or remove false starts.
 
