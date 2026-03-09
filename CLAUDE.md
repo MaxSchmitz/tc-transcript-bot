@@ -29,6 +29,7 @@ imsg chats --limit 1 --json
 If it fails, tell the user to grant Full Disk Access:
 - System Settings > Privacy & Security > Full Disk Access
 - Enable their terminal app (Terminal.app, iTerm, etc.)
+- Also add `/opt/homebrew/bin/bash` (required for the launchd agent to access Messages)
 
 ### 3. Gather configuration
 
@@ -53,7 +54,7 @@ OPENAI_API_KEY="<key>"
 INSTAGRAM_USER="<username or blank>"
 INSTAGRAM_PASS="<password or blank>"
 GDRIVE_TRANSCRIPT_DIR="<path to transcript folder>"
-PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+PATH="/opt/homebrew/bin:<path to claude binary's dir>:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ```
 
 Write an `allowed-senders.txt` file in the project root with one phone number or email per line:
