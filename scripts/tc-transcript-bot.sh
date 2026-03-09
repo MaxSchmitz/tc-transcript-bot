@@ -111,11 +111,6 @@ while IFS= read -r line <&"${IMSG[0]}"; do
   TEXT=$(echo "$line" | jq -r '.params.message.text // empty' 2>/dev/null)
   CHAT_ID=$(echo "$line" | jq -r '.params.message.chat_id // empty' 2>/dev/null)
 
-  # Only process messages containing an Instagram Reel URL
-  if ! echo "$TEXT" | grep -qi 'instagram\.com/reel'; then
-    continue
-  fi
-
   log "Received: $TEXT"
 
   START_TIME=$(date +%s)

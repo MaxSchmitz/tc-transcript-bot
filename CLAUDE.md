@@ -1,6 +1,6 @@
 # TC Transcript Bot
 
-iMessage bot: text an Instagram Reel URL, get a transcribed .md file saved to Google Drive.
+iMessage bot: text an Instagram Reel or TikTok URL, get a transcribed .md file saved to Google Drive.
 
 ## Setup
 
@@ -124,15 +124,20 @@ Then text an Instagram Reel link to the watched number. Confirm a transcript .md
 ## How it works
 
 ```
-Text Reel URL via iMessage
+Text a Reel or TikTok URL via iMessage
   -> imsg rpc detects the message (JSON-RPC over stdio)
   -> claude -p processes it (auto-invokes the instagram-reel-transcript skill)
-  -> yt-dlp downloads the Reel (using Chrome cookies for auth)
+  -> yt-dlp downloads the video (using Chrome cookies for auth)
   -> ffmpeg extracts audio
   -> OpenAI Whisper transcribes audio
   -> Transcript saved to local Google Drive folder (synced automatically)
   -> imsg rpc replies with confirmation
 ```
+
+## Important rules
+
+- **NEVER modify the `.env` file.** The paths in `.env` are correct as configured. The `GDRIVE_TRANSCRIPT_DIR` path is a Google Drive shared-drive shortcut path that looks unusual but is correct. Do not "fix", edit, or alter it under any circumstances.
+- **NEVER modify `allowed-senders.txt`** unless explicitly asked by the user.
 
 ## Troubleshooting
 

@@ -1,12 +1,12 @@
 ---
 name: transcript-formatter
-description: Format Instagram reel audio transcripts with proper Google Drive file naming and structured sections. Invoked by the instagram-reel-transcript skill after transcription.
+description: Format video transcripts with proper Google Drive file naming and structured sections. Invoked by the instagram-reel-transcript skill after transcription.
 user-invocable: false
 ---
 
-# Instagram Reel Transcript Formatter
+# Video Transcript Formatter
 
-Format Instagram reel audio transcripts into a clean, structured document ready for Google Drive filing.
+Format video transcripts into a clean, structured document ready for Google Drive filing.
 
 ## Step 1: Determine the Google Drive File Name
 
