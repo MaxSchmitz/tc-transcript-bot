@@ -1,0 +1,7 @@
+# Allowed senders -- one phone number or iMessage email per line.
+# Edit this file to add/remove senders. No restart needed.
+# Use E.164 format for phone numbers (e.g. +15551234567)
+# or iMessage email (e.g. user@icloud.com).
+
++15551234567
+user@icloud.com

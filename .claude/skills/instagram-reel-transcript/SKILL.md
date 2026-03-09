@@ -14,7 +14,7 @@ When you receive an Instagram Reel URL, process it through this pipeline. Run ea
 ## 1. Download the Reel
 
 ```bash
-yt-dlp --cookies-from-browser chrome -o "/tmp/reel_%(id)s.%(ext)s" --merge-output-format mp4 "{URL}"
+yt-dlp --cookies-from-browser chrome --write-info-json -o "/tmp/reel_%(id)s.%(ext)s" --merge-output-format mp4 "{URL}"
 ```
 
 If yt-dlp returns a 403, the Chrome cookies are stale. Refresh them by opening Instagram in Chrome:
@@ -61,16 +61,16 @@ DATE_DIR=$(date +%Y-%m-%d)
 mkdir -p "$GDRIVE_TRANSCRIPT_DIR/$DATE_DIR"
 ```
 
-Save the file inside the daily folder. The filename should be the Reel ID (extracted from the URL).
+The `transcript-formatter` skill determines the filename (based on username and date). Save the formatted file inside the daily folder.
 
 ## 5. Clean up
 
 ```bash
-rm -f /tmp/reel_{id}.mp4 /tmp/reel_{id}.wav
+rm -f /tmp/reel_{id}.mp4 /tmp/reel_{id}.wav /tmp/reel_{id}.info.json
 ```
 
 ## 6. Reply
 
-Send back a single message: "Done. Saved to {YYYY-MM-DD}/{reel_id}.md"
+Send back a single message: "Done. Saved to `{YYYY-MM-DD}/{filename}.md`"
 
 If any step failed, reply with a clear description of what went wrong and at which step.

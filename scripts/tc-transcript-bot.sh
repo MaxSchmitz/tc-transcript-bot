@@ -17,9 +17,9 @@ if [ -f "$PROJECT_DIR/.env" ]; then
   set +a
 fi
 
-WATCH_NUMBER="${TC_WATCH_NUMBER:?Set TC_WATCH_NUMBER (phone E.164 format or email, e.g. +15551234567 or user@icloud.com)}"
 CLAUDE_BIN="${CLAUDE_BIN:-claude}"
 LOG_DIR="$PROJECT_DIR/logs"
+ALLOWED_SENDERS_FILE="$PROJECT_DIR/allowed-senders.txt"
 
 mkdir -p "$LOG_DIR"
 
@@ -27,8 +27,27 @@ log() {
   echo "$(date '+%Y-%m-%d %H:%M:%S') $1" >> "$LOG_DIR/bot.log"
 }
 
+# Check if a sender is in the allowed list (re-reads file each time)
+is_allowed_sender() {
+  local check="$1"
+  [ ! -f "$ALLOWED_SENDERS_FILE" ] && return 1
+  while IFS= read -r entry || [ -n "$entry" ]; do
+    entry="${entry%%#*}"          # strip comments
+    entry="${entry// /}"          # strip spaces
+    [ -z "$entry" ] && continue
+    [ "$entry" = "$check" ] && return 0
+  done < "$ALLOWED_SENDERS_FILE"
+  return 1
+}
+
 # Start imsg rpc as a coprocess (JSON-RPC over stdio)
 coproc IMSG { imsg rpc 2>>"$LOG_DIR/imsg-rpc-stderr.log"; }
+sleep 0.5
+
+if [[ -z "${IMSG_PID:-}" ]] || ! kill -0 "$IMSG_PID" 2>/dev/null; then
+  log "ERROR: imsg rpc failed to start"
+  exit 1
+fi
 
 cleanup() {
   kill "$IMSG_PID" 2>/dev/null || true
@@ -49,7 +68,7 @@ send_rpc() {
   log "RPC >> $req"
 }
 
-log "Bot started (rpc mode), watching for messages from $WATCH_NUMBER"
+log "Bot started (rpc mode), using allowed-senders.txt"
 
 # Subscribe to message notifications
 send_rpc "watch.subscribe" '{"attachments":false}'
@@ -79,15 +98,12 @@ while IFS= read -r line <&"${IMSG[0]}"; do
   IS_FROM_ME=$(echo "$line" | jq -r '.params.message.is_from_me // false' 2>/dev/null)
   [ "$IS_FROM_ME" = "true" ] && continue
 
-  # Check if this message is from our watched contact
+  # Check if this message is from an allowed sender
   SENDER=$(echo "$line" | jq -r '.params.message.sender // empty' 2>/dev/null)
   CHAT_IDENTIFIER=$(echo "$line" | jq -r '.params.message.chat_identifier // empty' 2>/dev/null)
-  PARTICIPANTS=$(echo "$line" | jq -r '.params.message.participants[]?' 2>/dev/null)
 
   MATCH=false
-  if [ "$SENDER" = "$WATCH_NUMBER" ] || [ "$CHAT_IDENTIFIER" = "$WATCH_NUMBER" ]; then
-    MATCH=true
-  elif echo "$PARTICIPANTS" | grep -qF "$WATCH_NUMBER" 2>/dev/null; then
+  if is_allowed_sender "$SENDER" || is_allowed_sender "$CHAT_IDENTIFIER"; then
     MATCH=true
   fi
   [ "$MATCH" != "true" ] && continue
@@ -129,12 +145,12 @@ while IFS= read -r line <&"${IMSG[0]}"; do
 
   log "Responding (${#RESPONSE} chars, ${ELAPSED}s): ${RESPONSE:0:200}"
 
-  # Reply via RPC -- prefer chat_id (most stable), fall back to watch number
+  # Reply via RPC -- prefer chat_id (most stable), fall back to sender
   ESCAPED_TEXT=$(echo "$RESPONSE" | jq -Rs '.')
   if [ -n "$CHAT_ID" ] && [ "$CHAT_ID" != "null" ]; then
     send_rpc "send" "{\"chat_id\":$CHAT_ID,\"text\":$ESCAPED_TEXT}"
   else
-    ESCAPED_TO=$(printf '%s' "$WATCH_NUMBER" | jq -Rs '.')
+    ESCAPED_TO=$(printf '%s' "$SENDER" | jq -Rs '.')
     send_rpc "send" "{\"to\":$ESCAPED_TO,\"text\":$ESCAPED_TEXT}"
   fi
 done

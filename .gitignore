@@ -1,4 +1,5 @@
 .env
+allowed-senders.txt
 logs/
 transcripts/
 .DS_Store

@@ -12,11 +12,11 @@ When asked to set up this bot, do the following:
 # Homebrew (skip if already installed)
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# CLI tools
-brew install steipete/tap/imsg jq ffmpeg yt-dlp
+# CLI tools (bash 5 required for coproc support)
+brew install bash steipete/tap/imsg jq ffmpeg yt-dlp
 ```
 
-Verify each command exists: `imsg`, `jq`, `ffmpeg`, `yt-dlp`.
+Verify each command exists: `bash` (should be 5.x from Homebrew), `imsg`, `jq`, `ffmpeg`, `yt-dlp`.
 
 ### 2. Check macOS permissions
 
@@ -33,7 +33,7 @@ If it fails, tell the user to grant Full Disk Access:
 ### 3. Gather configuration
 
 Ask the user for:
-- **Phone number or iMessage email** to watch for incoming messages (E.164 format, e.g. +15551234567)
+- **Phone numbers or iMessage emails** of allowed senders (E.164 format, e.g. +15551234567 or user@icloud.com)
 - **OpenAI API key** (from platform.openai.com -- free tier works)
 - **Instagram credentials** (optional, for auto-login when cookies expire)
 - **Google Drive transcript folder path** (default: `~/Google Drive/My Drive/TC Transcripts`)
@@ -42,20 +42,28 @@ Confirm that:
 - Chrome is installed and logged into Instagram
 - Google Drive for Desktop is installed and signed in
 
-### 4. Create .env file
+### 4. Create config files
 
 Write a `.env` file in the project root:
 
 ```
-TC_WATCH_NUMBER="<phone or email>"
 TC_PROJECT_DIR="<absolute path to this project>"
 CLAUDE_BIN="<output of which claude>"
 OPENAI_API_KEY="<key>"
 INSTAGRAM_USER="<username or blank>"
 INSTAGRAM_PASS="<password or blank>"
 GDRIVE_TRANSCRIPT_DIR="<path to transcript folder>"
-PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin"
+PATH="/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ```
+
+Write an `allowed-senders.txt` file in the project root with one phone number or email per line:
+
+```
++15551234567
+user@icloud.com
+```
+
+The bot re-reads this file on each message, so senders can be added or removed without restarting.
 
 Create the transcript folder if it doesn't exist.
 
@@ -70,9 +78,14 @@ Create `~/Library/LaunchAgents/com.thoughtcatalog.transcript-bot.plist`:
 <dict>
     <key>Label</key>
     <string>com.thoughtcatalog.transcript-bot</string>
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
     <key>ProgramArguments</key>
     <array>
-        <string>/bin/bash</string>
+        <string>/opt/homebrew/bin/bash</string>
         <string>-c</string>
         <string>source "{TC_PROJECT_DIR}/.env" &amp;&amp; exec "{TC_PROJECT_DIR}/scripts/tc-transcript-bot.sh"</string>
     </array>
@@ -111,13 +124,13 @@ Then text an Instagram Reel link to the watched number. Confirm a transcript .md
 
 ```
 Text Reel URL via iMessage
-  -> imsg watch detects the message
+  -> imsg rpc detects the message (JSON-RPC over stdio)
   -> claude -p processes it (auto-invokes the instagram-reel-transcript skill)
   -> yt-dlp downloads the Reel (using Chrome cookies for auth)
   -> ffmpeg extracts audio
-  -> Deepgram transcribes audio
+  -> OpenAI Whisper transcribes audio
   -> Transcript saved to local Google Drive folder (synced automatically)
-  -> imsg send replies with confirmation
+  -> imsg rpc replies with confirmation
 ```
 
 ## Troubleshooting
