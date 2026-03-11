@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # Watches for iMessages and processes them with Claude Code.
 # Uses imsg rpc (JSON-RPC over stdio) for robust message I/O.
-# Claude Code auto-invokes the instagram-reel-transcript skill for Reel URLs.
-# Only processes messages containing instagram.com/reel (prevents loops when self-testing).
+# Claude Code auto-invokes the content-pipeline skill for any URL.
 # Requires bash 4+ (coproc). macOS: brew install bash
 
 set -euo pipefail

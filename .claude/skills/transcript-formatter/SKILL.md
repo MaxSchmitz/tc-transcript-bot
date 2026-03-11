@@ -1,12 +1,12 @@
 ---
 name: transcript-formatter
-description: Format video transcripts with proper Google Drive file naming and structured sections. Invoked by the instagram-reel-transcript skill after transcription.
+description: Format video transcripts with Grok enrichment and post options into a structured Google Drive document. Invoked by the instagram-reel-transcript skill after all pipeline steps complete.
 user-invocable: false
 ---
 
 # Video Transcript Formatter
 
-Format video transcripts into a clean, structured document ready for Google Drive filing.
+Format the full pipeline output into a clean, structured document ready for Google Drive.
 
 ## Step 1: Determine the Google Drive File Name
 
@@ -31,7 +31,7 @@ YYYY-MM-DD-instagramusername-3
 
 ## Step 2: Structure the Document
 
-Use H2 headings for all sections. Present them in this order:
+Use H2 headings for all sections. Present them in this exact order:
 
 ---
 
@@ -61,6 +61,45 @@ Example format:
 
 ---
 
+## Grok Analysis
+
+Paste the full Grok enrichment output here. It should contain these subsections (as H3 headings):
+
+### Background Context
+### Fact Check
+### Key Supporting Details
+### Viral Framing Analysis
+
+Do not edit or summarize the Grok output. Paste it as returned.
+
+---
+
+## Post Options
+
+Present all 5 post options, clearly numbered and separated. Use this format for each:
+
+### Option 1
+
+**Headline:** [headline text]
+
+**Body:**
+
+[Full post body copy]
+
+**Caption:** [social media caption]
+
+---
+
+### Option 2
+
+[same format]
+
+---
+
+[...through Option 5]
+
+---
+
 ## Top 3 Most Hearted Comments
 
 List the top 3 comments ranked by heart/like count, highest first.
@@ -87,3 +126,4 @@ If heart counts are not provided, list them in the order given and omit the hear
 - The date in the filename is the day the transcript was requested. Use the current date automatically.
 - If the username is not provided, extract it from the yt-dlp metadata (uploader or channel field in the .info.json).
 - If comments are not available, omit the Top 3 section entirely rather than leaving it blank.
+- If Grok analysis failed or was unavailable, include a note in the Grok Analysis section explaining the failure, and still generate the 5 post options using only the transcript.
