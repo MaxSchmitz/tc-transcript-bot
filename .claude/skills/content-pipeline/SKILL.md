@@ -126,9 +126,9 @@ curl -s https://api.x.ai/v1/chat/completions \
 
 Replace `<metadata>` with the source metadata and `<content>` with the full extracted content. Extract the response from `.choices[0].message.content`.
 
-## 3. Generate 5 post options
+## 3. Generate post option
 
-Using the extracted content, the Grok analysis, and the reference files in this skill directory, generate 5 distinct post options. Read these files before generating:
+Using the extracted content, the Grok analysis, and the reference files in this skill directory, generate 1 post option. Read these files before generating:
 
 - [core-writing-rules.md](core-writing-rules.md) -- banned phrases, dead AI language, writing rules
 - [viral-post-formats.md](viral-post-formats.md) -- 14 post formats and when to use each
@@ -136,14 +136,13 @@ Using the extracted content, the Grok analysis, and the reference files in this 
 - [headline-base.md](headline-base.md) -- headline writing with before/after examples
 - [caption-base.md](caption-base.md) -- caption writing rules and structure
 
-Each post option must contain:
-1. **Format** -- Which viral post format (from `viral-post-formats.md`) this option uses. Each option should use a different format.
-2. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found." The headline is the hardest part. Make each one a different angle on the same material.
-3. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok. Each option should take a different angle or emphasize a different part of the story.
+The post option must contain:
+1. **Format** -- Which viral post format (from `viral-post-formats.md`) best fits this content. Pick the single strongest format.
+2. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found."
+3. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok.
 4. **Caption** -- The social media caption that goes with the post. Shorter, punchier, optimized for engagement.
 
 Rules for post generation:
-- All 5 options use the same source material but take DIFFERENT angles
 - Use specific details from the Grok enrichment (names, numbers, quotes) -- never be vague
 - Write at a high school reading level. Short sentences. No jargon.
 - The headline does the heavy lifting. If the headline doesn't make someone stop scrolling, the rest doesn't matter.
@@ -157,12 +156,12 @@ Format the full document using [document-format.md](document-format.md). It defi
 The document must contain ALL of these sections in order:
 1. Sent by (the sender's phone number or email, extracted from the `[Sender: ...]` prefix in the prompt)
 2. Content URL (the original source URL)
-3. Raw Content (transcript for video, article text for articles, tweet text for tweets)
-4. Context Analysis (from Grok)
-5. Additional Information (from Grok)
-6. Viral Media (from Grok -- viral posts about this topic on X, Facebook, etc.)
-7. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
-8. Post Options (all 5 options from step 3)
+3. Context Analysis (from Grok)
+4. Additional Information (from Grok)
+5. Viral Media (from Grok -- viral posts about this topic on X, Facebook, etc.)
+6. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
+7. Post Option (from step 3)
+8. Raw Content (transcript for video, article text for articles, tweet text for tweets)
 
 Save the formatted file to the Google Drive folder. The environment variable `GDRIVE_TRANSCRIPT_DIR` points to a local folder synced by Google Drive for Desktop.
 
@@ -190,6 +189,12 @@ mkdir -p "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME"
 ```
 
 The [document-format.md](document-format.md) reference determines the filename. Save the formatted file inside the folder.
+
+After saving the .md file, convert it to .docx so it renders nicely in Google Drive:
+
+```bash
+pandoc "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.md" -o "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.docx"
+```
 
 ## 5. Reply
 

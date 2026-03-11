@@ -35,10 +35,6 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 # https://www.dailymail.co.uk/tvshowbiz/article-15633973/example.html
 
-# Raw Content
-
-[content here]
-
 # Context Analysis
 
 [Grok output here]
@@ -51,9 +47,7 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 [Grok output here]
 
-# Post Options
-
-## Option 1
+# Post Option
 
 **Format:** Extract Thrilling Sequence of Facts
 
@@ -65,10 +59,9 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 **Caption:** [caption]
 
----
+# Raw Content
 
-## Option 2
-[...]
+[content here]
 ```
 
 ### Section details:
@@ -76,8 +69,6 @@ The document MUST start with these lines in this exact order. Here is a concrete
 **# Sent by: [NAME]** -- Always include this. The sender name comes from the `[Sender: ...]` prefix in the prompt. Write it exactly as provided.
 
 **# [URL]** -- The original source URL as plain text. NOT a Markdown link. NOT wrapped in brackets. Just the raw URL on its own line after the `#`.
-
-**# Raw Content** -- For video: verbatim transcript (no edits). For articles: full article text. For tweets: full tweet text.
 
 **# Context Analysis** -- Paste from Grok response. Do not edit.
 
@@ -87,7 +78,9 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 **# Cleaned Transcript** -- VIDEO ONLY. Skip entirely for articles and tweets. For video, rewrite the raw transcript as a blockquote (`>`) with filler words removed, punctuation added, run-ons broken at natural breath points. Preserve the speaker's voice.
 
-**# Post Options** -- All 5 options. Each option uses `## Option N` (H2) with Format, Headline, Body, Caption fields separated by `---`.
+**# Post Option** -- Single post option with Format, Headline, Body, Caption fields.
+
+**# Raw Content** -- For video: verbatim transcript (no edits). For articles: full article text. For tweets: full tweet text. This goes at the bottom of the document.
 
 ---
 
@@ -95,4 +88,4 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 - The date in the filename is the day the content was processed. Use the current date automatically.
 - If the username is not provided, extract it from the yt-dlp metadata (uploader or channel field in the .info.json) or from WebFetch output.
-- If Grok analysis failed or was unavailable, include a note in the relevant sections explaining the failure, and still generate the 5 post options using only the raw content.
+- If Grok analysis failed or was unavailable, include a note in the relevant sections explaining the failure, and still generate the post option using only the raw content.
