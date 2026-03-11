@@ -110,7 +110,7 @@ SOURCE METADATA:
 <metadata>
 
 CONTENT:
-<content>" | "$PROJECT_DIR/.venv/bin/python3" "$PROJECT_DIR/.claude/skills/content-pipeline/scripts/grok-query.py" grok-4-1-fast-reasoning
+<content>" | uv run --project "$PROJECT_DIR" "$PROJECT_DIR/.claude/skills/content-pipeline/scripts/grok-query.py" grok-4-1-fast-reasoning
 ```
 
 Replace `<metadata>` with the source metadata (title, author, URL, description) and `<content>` with the full extracted content. The script prints Grok's response to stdout.

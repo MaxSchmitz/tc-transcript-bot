@@ -2,4 +2,5 @@
 allowed-senders.txt
 logs/
 transcripts/
+.venv
 .DS_Store
