@@ -167,9 +167,9 @@ The document must contain ALL of these sections in order:
 Save the formatted file to the Google Drive folder. The environment variable `GDRIVE_TRANSCRIPT_DIR` points to a local folder synced by Google Drive for Desktop.
 
 **Subdirectory by source type:**
-- **Video** (Instagram Reels, TikTok): save to `$GDRIVE_TRANSCRIPT_DIR/reels/`
-- **Articles** (news, blogs, webpages): save to `$GDRIVE_TRANSCRIPT_DIR/articles/`
-- **Tweets**: save to `$GDRIVE_TRANSCRIPT_DIR/articles/`
+- **Video** (Instagram Reels, TikTok): save to `$GDRIVE_TRANSCRIPT_DIR/Reels/`
+- **Articles** (news, blogs, webpages): save to `$GDRIVE_TRANSCRIPT_DIR/Articles/`
+- **Tweets**: save to `$GDRIVE_TRANSCRIPT_DIR/Articles/`
 
 Each source gets its own folder within the subdirectory:
 
@@ -185,7 +185,7 @@ YYYY-MM-DD-@Handle-[concise-slug]
 - For articles/tweets: extract from WebFetch output
 
 ```bash
-# Set SUBDIR to "reels" for video sources, "articles" for articles and tweets
+# Set SUBDIR to "Reels" for video sources, "Articles" for articles and tweets
 mkdir -p "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME"
 ```
 
