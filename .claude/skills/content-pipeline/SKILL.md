@@ -99,32 +99,23 @@ For all source types, capture whatever metadata is available:
 
 Pass this metadata to Grok so it can accurately identify speakers and sources.
 
-## 2. Enrich with Grok
+## 2. Get viral trends from Grok
 
-Send the extracted content AND the source metadata to the Grok API. Including metadata (who the speaker is, what video/article this came from) prevents misattribution.
+Send the extracted content and source metadata to the Grok API and ask what's being said about this topic on X.
 
 ```bash
-curl -s https://api.x.ai/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $GROK_API_KEY" \
-  -d '{
-    "messages": [
-      {
-        "role": "system",
-        "content": "You are a research analyst for a viral content team. Given source content, provide deep enrichment that a content writer needs to turn this into a high-performing post. Be specific, not generic."
-      },
-      {
-        "role": "user",
-        "content": "SOURCE METADATA:\n<metadata>\n\nCONTENT:\n<content>\n\nAnalyze this and return a structured analysis with these exact sections:\n\n## Context Analysis\nWhat is this? Who is the speaker/author? What broader story or trend does this connect to? Include specific names, dates, studies, or events referenced. Key data points a writer needs to know.\n\n## Additional Information\nAnything else worth noting about this topic. Background details, related developments, things a content writer should know that aren't in the source material itself.\n\n## Viral Media\nAre there viral posts about this on X, Facebook, or other platforms? Link to them and explain what is going viral about it. What angles are getting the most traction? What framing is working?"
-      }
-    ],
-    "model": "grok-3-latest",
-    "stream": false,
-    "temperature": 0.3
-  }'
+echo "What are the tweets about this and what is going viral in this context? Include direct links to the most relevant tweets and posts.
+
+SOURCE METADATA:
+<metadata>
+
+CONTENT:
+<content>" | "$PROJECT_DIR/.venv/bin/python3" "$PROJECT_DIR/.claude/skills/content-pipeline/scripts/grok-query.py" grok-4-1-fast-reasoning
 ```
 
-Replace `<metadata>` with the source metadata and `<content>` with the full extracted content. Extract the response from `.choices[0].message.content`.
+Replace `<metadata>` with the source metadata (title, author, URL, description) and `<content>` with the full extracted content. The script prints Grok's response to stdout.
+
+`$PROJECT_DIR` is the tc-transcript-bot root directory (set by the bot script as `$TC_PROJECT_DIR`).
 
 ## 3. Generate post option
 
@@ -154,47 +145,40 @@ Rules for post generation:
 Format the full document using [document-format.md](document-format.md). It defines the document structure, filename convention, and output template.
 
 The document must contain ALL of these sections in order:
-1. Sent by (the sender's phone number or email, extracted from the `[Sender: ...]` prefix in the prompt)
+1. Sent by (the sender's name, extracted from the `[Sender: ...]` prefix in the prompt)
 2. Content URL (the original source URL)
-3. Context Analysis (from Grok)
-4. Additional Information (from Grok)
-5. Viral Media (from Grok -- viral posts about this topic on X, Facebook, etc.)
-6. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
-7. Post Option (from step 3)
+3. Post Option (from step 3)
+4. User Requested Field (OPTIONAL -- only if the sender included extra instructions beyond the URL)
+5. Viral Trends (Grok's response -- tweets and viral context)
+6. Key Data Points (important facts, numbers, names, dates from the content)
+7. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
 8. Raw Content (transcript for video, article text for articles, tweet text for tweets)
 
-Save the formatted file to the Google Drive folder. The environment variable `GDRIVE_TRANSCRIPT_DIR` points to a local folder synced by Google Drive for Desktop.
+### Save location
 
-**Subdirectory by source type:**
-- **Video** (Instagram Reels, TikTok): save to `$GDRIVE_TRANSCRIPT_DIR/Reels/`
-- **Articles** (news, blogs, webpages): save to `$GDRIVE_TRANSCRIPT_DIR/Articles/`
-- **Tweets**: save to `$GDRIVE_TRANSCRIPT_DIR/Articles/`
+Determine the subdirectory and folder name BEFORE writing the file:
 
-Each source gets its own folder within the subdirectory:
+- **SUBDIR**: `Reels` for video sources (Instagram Reels, TikTok), `Articles` for articles and tweets
+- **FOLDER_NAME**: `YYYY-MM-DD-@Handle-concise-slug` (date is today, include @ before handle, 2-4 word slug)
+- **FILENAME**: from [document-format.md](document-format.md) -- `YYYY-MM-DD-username` (lowercase, no @)
 
-```
-YYYY-MM-DD-@Handle-[concise-slug]
-```
+For video: extract username from yt-dlp metadata (.info.json). For articles/tweets: extract from WebFetch output. For articles with no handle, use the publication name or author name.
 
-- Date is the day the content was processed
-- Include the @ symbol before the handle/author, preserve original capitalization
-- For articles with no handle, use the publication name or author name
-- The slug is a concise 2-4 word summary of the content topic, lowercase, hyphenated
-- For video: extract username from yt-dlp metadata (.info.json)
-- For articles/tweets: extract from WebFetch output
+### Save steps (ALL THREE are mandatory)
 
 ```bash
-# Set SUBDIR to "Reels" for video sources, "Articles" for articles and tweets
+# Step 4a: Create the output directory
 mkdir -p "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME"
+
+# Step 4b: Write the .md file
+# (use Write tool or cat heredoc to create the file)
+
+# Step 4c: Convert to .docx -- DO NOT SKIP THIS
+pandoc "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.md" \
+  -o "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.docx"
 ```
 
-The [document-format.md](document-format.md) reference determines the filename. Save the formatted file inside the folder.
-
-After saving the .md file, convert it to .docx so it renders nicely in Google Drive:
-
-```bash
-pandoc "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.md" -o "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.docx"
-```
+All three steps must execute. If pandoc fails, report the error but still keep the .md file.
 
 ## 5. Reply
 

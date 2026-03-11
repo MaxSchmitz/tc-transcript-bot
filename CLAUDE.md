@@ -38,7 +38,7 @@ Pipeline steps (handled by `instagram-reel-transcript` skill):
 ## APIs
 
 - **OpenAI Whisper**: `$OPENAI_API_KEY` -- audio transcription
-- **Grok (x.ai)**: `$GROK_API_KEY` -- enrichment and analysis. OpenAI-compatible at `https://api.x.ai/v1/chat/completions`, model `grok-3-latest`
+- **Grok (x.ai)**: `$GROK_API_KEY` -- viral trends. Via xai-sdk (`.claude/skills/content-pipeline/scripts/grok-query.py`), model `grok-4-1-fast-reasoning`
 - **iMessage**: imsg rpc (JSON-RPC over stdio)
 - **Google Drive**: local folder sync (no API)
 

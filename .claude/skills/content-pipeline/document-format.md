@@ -35,18 +35,6 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 # https://www.dailymail.co.uk/tvshowbiz/article-15633973/example.html
 
-# Context Analysis
-
-[Grok output here]
-
-# Additional Information
-
-[Grok output here]
-
-# Viral Media
-
-[Grok output here]
-
 # Post Option
 
 **Format:** Extract Thrilling Sequence of Facts
@@ -59,6 +47,14 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 **Caption:** [caption]
 
+# Viral Trends
+
+[Grok output here]
+
+# Key Data Points
+
+[key facts, numbers, names, dates extracted from the content]
+
 # Raw Content
 
 [content here]
@@ -70,15 +66,15 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 **# [URL]** -- The original source URL as plain text. NOT a Markdown link. NOT wrapped in brackets. Just the raw URL on its own line after the `#`.
 
-**# Context Analysis** -- Paste from Grok response. Do not edit.
+**# Post Option** -- Single post option with Format, Headline, Body, Caption fields.
 
-**# Additional Information** -- Paste from Grok response. Do not edit.
+**# [User Requested Field]** -- OPTIONAL. Only include if the sender's message contains additional instructions or a specific question beyond just the URL. Use the sender's words as the heading and answer their request in this section. If the message is just a URL with no extra text, skip this section entirely.
 
-**# Viral Media** -- Paste from Grok response. Do not edit.
+**# Viral Trends** -- Paste the full Grok response. Do not edit.
+
+**# Key Data Points** -- Extract the most important facts, numbers, names, dates, and quotes from the content. Bulleted list. These are the details a writer needs at a glance.
 
 **# Cleaned Transcript** -- VIDEO ONLY. Skip entirely for articles and tweets. For video, rewrite the raw transcript as a blockquote (`>`) with filler words removed, punctuation added, run-ons broken at natural breath points. Preserve the speaker's voice.
-
-**# Post Option** -- Single post option with Format, Headline, Body, Caption fields.
 
 **# Raw Content** -- For video: verbatim transcript (no edits). For articles: full article text. For tweets: full tweet text. This goes at the bottom of the document.
 
