@@ -113,7 +113,7 @@ curl -s https://api.x.ai/v1/chat/completions \
       },
       {
         "role": "user",
-        "content": "SOURCE METADATA:\n<metadata>\n\nCONTENT:\n<content>\n\nAnalyze this and return a structured analysis with these exact sections:\n\n## Background Context\nWho is the speaker/author? What is the source material? What broader story or trend does this connect to? Include specific names, dates, studies, or events referenced. If the speaker references something without naming it, identify what they are referring to.\n\n## Fact Check\nVerify the key claims. Flag anything that is misleading, out of context, or disputed. If claims are accurate, say so and cite why.\n\n## Key Supporting Details\nThe specific facts, statistics, quotes, or anecdotes that a writer would want to include. Pull these out verbatim or near-verbatim.\n\n## Viral Framing Analysis\nWhy is this content framed the way it is? What emotional trigger is it hitting? What makes someone stop scrolling for this? Be specific about the psychological mechanism -- not just \"it is relatable\" but WHY it is relatable and to whom."
+        "content": "SOURCE METADATA:\n<metadata>\n\nCONTENT:\n<content>\n\nAnalyze this and return a structured analysis with these exact sections:\n\n## Context Analysis\nWhat is this? Who is the speaker/author? What broader story or trend does this connect to? Include specific names, dates, studies, or events referenced. Key data points a writer needs to know.\n\n## Additional Information\nAnything else worth noting about this topic. Background details, related developments, things a content writer should know that aren't in the source material itself.\n\n## Viral Media\nAre there viral posts about this on X, Facebook, or other platforms? Link to them and explain what is going viral about it. What angles are getting the most traction? What framing is working?"
       }
     ],
     "model": "grok-3-latest",
@@ -126,7 +126,13 @@ Replace `<metadata>` with the source metadata and `<content>` with the full extr
 
 ## 3. Generate 5 post options
 
-Using the extracted content, the Grok analysis, and the content skill files in `$TC_PROJECT_DIR/skills/facebook/` (especially `core-writing-rules.md`, `viral-post-formats.md`, and `facebook-post-containers.md`), generate 5 distinct post options. Read those skill files before generating -- they contain the writing rules, banned phrases, 14 post formats, and the two-container architecture that all posts must follow.
+Using the extracted content, the Grok analysis, and the content skill files in `$TC_PROJECT_DIR/skills/facebook/`, generate 5 distinct post options. Read these skill files before generating:
+
+- `core-writing-rules.md` -- banned phrases, dead AI language, writing rules
+- `viral-post-formats.md` -- 14 post formats and when to use each
+- `facebook-post-containers.md` -- two-container architecture (image + caption)
+- `headline-base.md` -- headline writing with before/after examples
+- `caption-base.md` -- caption writing rules and structure
 
 Each post option must contain:
 1. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found." The headline is the hardest part. Make each one a different angle on the same material.
@@ -146,10 +152,13 @@ Rules for post generation:
 Format the full document using the `transcript-formatter` skill. It defines the document structure, template, and output format.
 
 The document must contain ALL of these sections in order:
-1. Raw Content (transcript for video, article text for articles, tweet text for tweets)
-2. Clean Content (structured, readable version)
-3. Grok Analysis (the full enrichment from step 2)
-4. Post Options (all 5 options from step 3)
+1. Content URL (the original source URL)
+2. Raw Content (transcript for video, article text for articles, tweet text for tweets)
+3. Context Analysis (from Grok)
+4. Additional Information (from Grok)
+5. Viral Media (from Grok -- viral posts about this topic on X, Facebook, etc.)
+6. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
+7. Post Options (all 5 options from step 3)
 
 Save the formatted file to the Google Drive folder. The environment variable `GDRIVE_TRANSCRIPT_DIR` points to a local folder synced by Google Drive for Desktop.
 
