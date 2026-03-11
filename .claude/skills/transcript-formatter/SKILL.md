@@ -105,6 +105,8 @@ Present all 5 post options, clearly numbered and separated. Use this format for 
 
 ## Option 1
 
+**Format:** [viral post format name from viral-post-formats.md]
+
 **Headline:** [headline text]
 
 **Body:**

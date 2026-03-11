@@ -137,9 +137,10 @@ Using the extracted content, the Grok analysis, and the content skill files in `
 - `caption-base.md` -- caption writing rules and structure
 
 Each post option must contain:
-1. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found." The headline is the hardest part. Make each one a different angle on the same material.
-2. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok. Each option should take a different angle or emphasize a different part of the story.
-3. **Caption** -- The social media caption that goes with the post. Shorter, punchier, optimized for engagement.
+1. **Format** -- Which viral post format (from `viral-post-formats.md`) this option uses. Each option should use a different format.
+2. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found." The headline is the hardest part. Make each one a different angle on the same material.
+3. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok. Each option should take a different angle or emphasize a different part of the story.
+4. **Caption** -- The social media caption that goes with the post. Shorter, punchier, optimized for engagement.
 
 Rules for post generation:
 - All 5 options use the same source material but take DIFFERENT angles
