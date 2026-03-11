@@ -128,13 +128,13 @@ Replace `<metadata>` with the source metadata and `<content>` with the full extr
 
 ## 3. Generate 5 post options
 
-Using the extracted content, the Grok analysis, and the content skill files in `$TC_PROJECT_DIR/skills/facebook/`, generate 5 distinct post options. Read these skill files before generating:
+Using the extracted content, the Grok analysis, and the reference files in this skill directory, generate 5 distinct post options. Read these files before generating:
 
-- `core-writing-rules.md` -- banned phrases, dead AI language, writing rules
-- `viral-post-formats.md` -- 14 post formats and when to use each
-- `facebook-post-containers.md` -- two-container architecture (image + caption)
-- `headline-base.md` -- headline writing with before/after examples
-- `caption-base.md` -- caption writing rules and structure
+- [core-writing-rules.md](core-writing-rules.md) -- banned phrases, dead AI language, writing rules
+- [viral-post-formats.md](viral-post-formats.md) -- 14 post formats and when to use each
+- [facebook-post-containers.md](facebook-post-containers.md) -- two-container architecture (image + caption)
+- [headline-base.md](headline-base.md) -- headline writing with before/after examples
+- [caption-base.md](caption-base.md) -- caption writing rules and structure
 
 Each post option must contain:
 1. **Format** -- Which viral post format (from `viral-post-formats.md`) this option uses. Each option should use a different format.
@@ -152,7 +152,7 @@ Rules for post generation:
 
 ## 4. Format and save
 
-Format the full document using the `transcript-formatter` skill. It defines the document structure, template, and output format.
+Format the full document using [document-format.md](document-format.md). It defines the document structure, filename convention, and output template.
 
 The document must contain ALL of these sections in order:
 1. Sent by (the sender's phone number or email, extracted from the `[Sender: ...]` prefix in the prompt)
@@ -166,7 +166,12 @@ The document must contain ALL of these sections in order:
 
 Save the formatted file to the Google Drive folder. The environment variable `GDRIVE_TRANSCRIPT_DIR` points to a local folder synced by Google Drive for Desktop.
 
-Each source gets its own folder:
+**Subdirectory by source type:**
+- **Video** (Instagram Reels, TikTok): save to `$GDRIVE_TRANSCRIPT_DIR/reels/`
+- **Articles** (news, blogs, webpages): save to `$GDRIVE_TRANSCRIPT_DIR/articles/`
+- **Tweets**: save to `$GDRIVE_TRANSCRIPT_DIR/articles/`
+
+Each source gets its own folder within the subdirectory:
 
 ```
 YYYY-MM-DD-@Handle-[concise-slug]
@@ -180,10 +185,11 @@ YYYY-MM-DD-@Handle-[concise-slug]
 - For articles/tweets: extract from WebFetch output
 
 ```bash
-mkdir -p "$GDRIVE_TRANSCRIPT_DIR/$FOLDER_NAME"
+# Set SUBDIR to "reels" for video sources, "articles" for articles and tweets
+mkdir -p "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME"
 ```
 
-The `transcript-formatter` skill determines the filename. Save the formatted file inside the folder.
+The [document-format.md](document-format.md) reference determines the filename. Save the formatted file inside the folder.
 
 ## 5. Reply
 
