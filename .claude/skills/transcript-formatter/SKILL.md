@@ -36,6 +36,12 @@ Use H1 headings for all sections. Present them in this exact order:
 
 ---
 
+# Sent by: [SENDER NAME]
+
+If a sender name was provided, display it here at the very top of the document. If no sender name is available, omit this section entirely.
+
+---
+
 # [CONTENT URL]
 
 The original source URL, displayed as a clickable link.

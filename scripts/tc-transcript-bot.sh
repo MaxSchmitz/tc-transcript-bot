@@ -27,14 +27,24 @@ log() {
 }
 
 # Check if a sender is in the allowed list (re-reads file each time)
+# Sets SENDER_NAME as a side effect when matched
 is_allowed_sender() {
   local check="$1"
   [ ! -f "$ALLOWED_SENDERS_FILE" ] && return 1
   while IFS= read -r entry || [ -n "$entry" ]; do
     entry="${entry%%#*}"          # strip comments
-    entry="${entry// /}"          # strip spaces
+    entry="${entry// /}"          # strip leading/trailing spaces
     [ -z "$entry" ] && continue
-    [ "$entry" = "$check" ] && return 0
+    local id="${entry%%|*}"       # part before pipe
+    id="${id// /}"
+    [ "$id" = "$check" ] && {
+      # Extract name if pipe-delimited
+      if [[ "$entry" == *"|"* ]]; then
+        SENDER_NAME="${entry#*|}"
+        SENDER_NAME="${SENDER_NAME## }"  # trim leading space
+      fi
+      return 0
+    }
   done < "$ALLOWED_SENDERS_FILE"
   return 1
 }
@@ -101,6 +111,7 @@ while IFS= read -r line <&"${IMSG[0]}"; do
   SENDER=$(echo "$line" | jq -r '.params.message.sender // empty' 2>/dev/null)
   CHAT_IDENTIFIER=$(echo "$line" | jq -r '.params.message.chat_identifier // empty' 2>/dev/null)
 
+  SENDER_NAME="${SENDER:-$CHAT_IDENTIFIER}"
   MATCH=false
   if is_allowed_sender "$SENDER" || is_allowed_sender "$CHAT_IDENTIFIER"; then
     MATCH=true
@@ -110,12 +121,20 @@ while IFS= read -r line <&"${IMSG[0]}"; do
   TEXT=$(echo "$line" | jq -r '.params.message.text // empty' 2>/dev/null)
   CHAT_ID=$(echo "$line" | jq -r '.params.message.chat_id // empty' 2>/dev/null)
 
+  # Skip empty messages (tapbacks, reactions, etc.)
+  [ -z "$TEXT" ] && continue
+
   log "Received: $TEXT"
 
   START_TIME=$(date +%s)
   log "Starting claude -p..."
 
-  RESPONSE=$( cd "$PROJECT_DIR" && "$CLAUDE_BIN" -p "$TEXT" \
+  PROMPT="$TEXT"
+  if [ -n "$SENDER_NAME" ]; then
+    PROMPT="[Sender: $SENDER_NAME] $TEXT"
+  fi
+
+  RESPONSE=$( cd "$PROJECT_DIR" && "$CLAUDE_BIN" -p "$PROMPT" \
     --dangerously-skip-permissions --output-format text --verbose \
     2>>"$LOG_DIR/claude-verbose.log" < /dev/null ) || true
   END_TIME=$(date +%s)

@@ -55,11 +55,11 @@ GDRIVE_TRANSCRIPT_DIR="<path to transcript folder>"
 PATH="/opt/homebrew/bin:<path to claude binary's dir>:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ```
 
-Write an `allowed-senders.txt` file in the project root with one phone number or email per line:
+Write an `allowed-senders.txt` file in the project root with one entry per line. Optionally add a name after a pipe (`|`) -- the name appears at the top of output documents:
 
 ```
-+15551234567
-user@icloud.com
++15551234567|John Smith
+user@icloud.com|John Smith
 ```
 
 The bot re-reads this file on each message, so senders can be added or removed without restarting.

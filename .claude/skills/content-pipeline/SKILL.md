@@ -16,6 +16,8 @@ triggers:
 
 When you receive a URL, determine the source type, extract its content, enrich with Grok, and generate post options.
 
+**Sender detection:** The input may be prefixed with `[Sender: Name]`. Extract and strip this prefix. Pass the sender name to the formatter so it appears at the top of the output document.
+
 ## 1. Detect source type and extract content
 
 ### Video URLs (Instagram Reels, TikTok)
@@ -152,13 +154,14 @@ Rules for post generation:
 Format the full document using the `transcript-formatter` skill. It defines the document structure, template, and output format.
 
 The document must contain ALL of these sections in order:
-1. Content URL (the original source URL)
-2. Raw Content (transcript for video, article text for articles, tweet text for tweets)
-3. Context Analysis (from Grok)
-4. Additional Information (from Grok)
-5. Viral Media (from Grok -- viral posts about this topic on X, Facebook, etc.)
-6. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
-7. Post Options (all 5 options from step 3)
+1. Sent by (the sender's phone number or email, extracted from the `[Sender: ...]` prefix in the prompt)
+2. Content URL (the original source URL)
+3. Raw Content (transcript for video, article text for articles, tweet text for tweets)
+4. Context Analysis (from Grok)
+5. Additional Information (from Grok)
+6. Viral Media (from Grok -- viral posts about this topic on X, Facebook, etc.)
+7. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
+8. Post Options (all 5 options from step 3)
 
 Save the formatted file to the Google Drive folder. The environment variable `GDRIVE_TRANSCRIPT_DIR` points to a local folder synced by Google Drive for Desktop.
 
