@@ -45,8 +45,6 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 [body]
 
-**Caption:** [caption]
-
 # Viral Trends
 
 [Grok output here]
@@ -66,7 +64,7 @@ The document MUST start with these lines in this exact order. Here is a concrete
 
 **# [URL]** -- The original source URL as plain text. NOT a Markdown link. NOT wrapped in brackets. Just the raw URL on its own line after the `#`.
 
-**# Post Option** -- Single post option with Format, Headline, Body, Caption fields.
+**# Post Option** -- Single post option with Format, Headline, Body fields.
 
 **# [User Requested Field]** -- OPTIONAL. Only include if the sender's message contains additional instructions or a specific question beyond just the URL. Use the sender's words as the heading and answer their request in this section. If the message is just a URL with no extra text, skip this section entirely.
 

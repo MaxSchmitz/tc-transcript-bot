@@ -131,7 +131,6 @@ The post option must contain:
 1. **Format** -- Which viral post format (from `viral-post-formats.md`) best fits this content. Pick the single strongest format.
 2. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found."
 3. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok.
-4. **Caption** -- The social media caption that goes with the post. Shorter, punchier, optimized for engagement.
 
 Rules for post generation:
 - Use specific details from the Grok enrichment (names, numbers, quotes) -- never be vague
