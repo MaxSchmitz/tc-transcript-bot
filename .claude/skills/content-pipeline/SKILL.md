@@ -132,13 +132,6 @@ The post option must contain:
 2. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found."
 3. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok.
 
-Rules for post generation:
-- Use specific details from the Grok enrichment (names, numbers, quotes) -- never be vague
-- Write at a high school reading level. Short sentences. No jargon.
-- The headline does the heavy lifting. If the headline doesn't make someone stop scrolling, the rest doesn't matter.
-- Do NOT start headlines with "How", "Why", "What", or "The" -- those are invisible on a feed
-- Do NOT use clickbait formulas ("You won't believe..."). Use specificity instead.
-
 ## 4. Format and save
 
 Format the full document using [document-format.md](document-format.md). It defines the document structure, filename convention, and output template.
