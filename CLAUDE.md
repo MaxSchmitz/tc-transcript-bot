@@ -8,13 +8,13 @@ iMessage bot that turns video URLs into enriched content documents with post opt
 iMessage URL -> imsg rpc -> claude -p (skills auto-invoke) -> Google Drive
 ```
 
-Pipeline steps (handled by `instagram-reel-transcript` skill):
+Pipeline steps (handled by `content-pipeline` skill):
 1. yt-dlp downloads video (Chrome cookies for auth)
 2. ffmpeg extracts audio
 3. OpenAI Whisper transcribes
-4. Grok API enriches (background, fact-check, viral framing)
-5. Claude generates 5 post options (headline, body, caption)
-6. Saves structured document to `$GDRIVE_TRANSCRIPT_DIR`
+4. Grok API enriches (trending context, relevant tweets, viral angle)
+5. Claude generates 1 post option (headline, body, caption) using one of 14 viral format functions
+6. Saves structured document (.md + .docx) to `$GDRIVE_TRANSCRIPT_DIR`
 
 ## Key Files
 
