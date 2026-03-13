@@ -1,9 +1,9 @@
 ---
-name: viral-post-formats
-description: Complete reference for all viral Facebook post formats and content extraction functions. Use this skill whenever selecting a format for a post, matching source material to the right approach, or adding a new format to the system. Trigger on phrases like "which format should I use", "what function is this", "what kind of post is this", or whenever source material needs to be matched to the right extraction approach. This is the canonical list of all 12 formats. When a new format is developed through real post work, add it here.
+name: Viral-Format-Functions
+description: Complete reference for all 14 viral Facebook content functions. Use this whenever selecting a format for a post, matching source material to the right approach, or adding a new function to the system. This is the canonical list. When a new function is developed through real post work, add it here.
 ---
 
-# The 12 Viral Post Formats
+# The 14 Viral Format Functions
 
 ---
 
@@ -184,7 +184,7 @@ Structure, Caption:
 - Full authoritative context
 - Research credentials and specifics
 - Line-by-line breakdown if applicable
-- Why pattern is universal
+- Why the pattern is universal
 
 Enrichment types:
 - Scientific research (peer-reviewed, specific data)
@@ -260,7 +260,7 @@ Examples:
 - Medical records showing systematic abuse
 - Receipts proving contradictory claims
 
-Critical skill: This is not "show the document and describe it." This is "distill the most viral truth the document proves into the most powerful minimal expression."
+Critical: This is not "show the document and describe it." This is "distill the most viral truth the document proves into the most powerful minimal expression."
 
 ---
 
@@ -323,24 +323,23 @@ What to extract:
 - What it means for a 45-year-old who has never heard the technical terms
 - What it does NOT mean yet (critical for credibility)
 
-Headline rules for this function:
-- Never open with "Scientists have believed" or any variation. That is fluff. It signals a school report, not a revelation.
+Headline rules:
+- Never open with "Scientists have believed" or any variation. That is fluff.
 - Never use "last week" or any time marker that kills urgency. The finding is the urgency.
 - Open with the assumption that is now broken. State it as fact, not as what scientists thought.
-- Land on what changed and how far it went, using only numbers and plain language the mainstream mind can feel.
-- The test: read the headline to someone who has never heard of the field. Do they immediately understand why it matters to their life? If not, rewrite.
+- Land on what changed and how far it went, using only numbers and plain language.
 - Best structure: "[What everyone assumed was permanent or true]. [What just happened to change it, in plain numbers or plain human stakes]."
 - Real example: "Aging was always assumed to be a one-way road to death. An AI just produced results in human cells that scientists couldn't reach in 13 years of trying."
 
 Structure:
-- Headline translates the finding into plain human stakes. No jargon. No proper nouns that require prior knowledge.
-- Image text builds the before/after arc in plain language. Start with what everyone believed. Show the moment it changed. Land on what just happened without using the technical name for it.
-- Caption carries the technical layer for readers who want it, but only after the human stakes are established. Name the researchers, the institution, the mechanism. Be honest about what the results do not yet mean.
+- Headline translates the finding into plain human stakes. No jargon.
+- Image text builds the before/after arc in plain language.
+- Caption carries the technical layer for readers who want it, but only after the human stakes are established.
 
 The translation rules:
 - Replace every proper noun that requires prior knowledge with what it actually does ("Yamanaka factors" becomes "4 proteins that can reverse cellular aging")
 - Replace every technical term with its human meaning ("pluripotency markers" becomes "biological signals that aging has reversed")
-- Replace percentage improvements with analogies that make scale visceral ("50x improvement" becomes "the ceiling that held for 13 years moved in a single pass")
+- Replace percentage improvements with analogies that make scale visceral
 - State what it does NOT mean yet. Credibility comes from honesty about limits.
 
 Why people share:
@@ -353,13 +352,13 @@ Examples:
 - Any medical breakthrough described in clinical language that has clear human implications
 - Any scientific finding where the headline in the original source loses 90% of potential readers in the first sentence
 
-Critical distinction: This is not dumbing down. It is translation. The finding stays accurate. The language becomes human. The test: does someone who has never heard of this field understand immediately why it matters to them personally?
+Critical distinction: This is not dumbing down. It is translation. The finding stays accurate. The language becomes human.
 
 ---
 
 ### 14. Cultural Object Explainer
 
-When to use: A piece of culture, a brand campaign, a film, an album, a fashion moment, a performance, has just landed and is already going viral or breaking. The post's job is not to reveal something hidden. It is to give the reader the full picture of why this moment matters, what it is in conversation with historically, and what is happening around it right now.
+When to use: A piece of culture -- a brand campaign, a film, an album, a fashion moment, a performance -- has just landed and is already going viral or breaking. The post's job is to give the reader the full picture of why this moment matters, what it's in conversation with historically, and what is happening around it right now.
 
 What to extract:
 - What the object actually is and what happens in it (scene-by-scene if needed)
@@ -370,14 +369,12 @@ What to extract:
 
 How this differs from other functions:
 - Unlike Extract and Enrich, there is no single viral moment to present cleanly before enriching it. The entire object is the subject.
-- Unlike Cultural Resurgence, this is not then vs. now symmetry. It is a new thing that carries the DNA of old things, and explaining that DNA is the whole post.
-- Unlike Reveal Hidden Pattern, there is no hidden connection being surfaced. The connections are visible. The job is to explain why they matter.
+- Unlike Cultural Resurgence, this is not then vs. now symmetry. It is a new thing that carries the DNA of old things.
+- Unlike Reveal Hidden Pattern, the connections are visible. The job is to explain why they matter.
 
 Format:
-- The article format works better than the standard image/caption format for this function. The object deserves a frame, a history, and a context layer that a single caption cannot hold.
+- The article format works better than the standard image/caption format for this function.
 - Use H2 headers to organize the key dimensions: the object itself, the homage or historical context, the product or concrete detail, the cultural timing.
-- The headline should name the object and signal the cultural question it raises.
-- The opening paragraph positions the object in the cultural moment before any detail is given.
 
 Structure:
 - Headline: names the object and the cultural question
@@ -396,6 +393,5 @@ Examples:
 - Dakota Johnson Spring 2026 Calvin Klein campaign
 - A major album drop that carries the DNA of an earlier era
 - A fashion campaign that deliberately echoes an iconic historical moment
-- A film or series that reactivates cultural appetite for something thought to be gone
 
-Critical distinction: The object is not a hook for a larger argument. The object is the subject. The post serves the object by giving it full context. Resist the urge to find a hidden pattern or a reveal. Sometimes a campaign is just a great campaign and the job is to explain exactly why.
+Critical distinction: The object is not a hook for a larger argument. The object is the subject. Resist the urge to find a hidden pattern or a reveal. Sometimes a campaign is just a great campaign and the job is to explain exactly why.

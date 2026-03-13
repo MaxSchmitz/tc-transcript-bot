@@ -1,6 +1,6 @@
 ---
 name: content-pipeline
-description: Process any URL (video, article, tweet) into an enriched content document with Grok analysis and 5 post options
+description: Process any URL (video, article, tweet) into an enriched content document with Grok analysis and 1 post option
 triggers:
   - instagram.com/reel
   - instagram.com/reels
@@ -14,9 +14,11 @@ triggers:
 
 # Content Pipeline
 
-When you receive a URL, determine the source type, extract its content, enrich with Grok, and generate post options.
+When you receive a URL, determine the source type, extract its content, enrich with Grok, and generate a post option.
 
 **Sender detection:** The input may be prefixed with `[Sender: Name]`. Extract and strip this prefix. Pass the sender name to the formatter so it appears at the top of the output document.
+
+---
 
 ## 1. Detect source type and extract content
 
@@ -77,8 +79,6 @@ Use the **WebFetch** tool to fetch the page. Ask it to extract:
 - Full article body text
 - Publication date if available
 
-This becomes the "raw content" equivalent of a transcript.
-
 ### Tweet / Twitter thread URLs
 
 If the URL contains `twitter.com` or `x.com`:
@@ -88,8 +88,6 @@ Use the **WebFetch** tool to fetch the tweet or thread. Ask it to extract:
 - Full text of the tweet or thread (all tweets in order)
 - Engagement metrics if visible (likes, retweets, replies)
 
-This becomes the "raw content" equivalent of a transcript.
-
 ### Source metadata
 
 For all source types, capture whatever metadata is available:
@@ -97,54 +95,54 @@ For all source types, capture whatever metadata is available:
 - **Article**: author, publication, date from WebFetch
 - **Tweet**: author handle, date, engagement from WebFetch
 
-Pass this metadata to Grok so it can accurately identify speakers and sources.
+Pass this metadata to Grok in Step 2.
 
-## 2. Get viral trends from Grok
+---
 
-Send the extracted content and source metadata to the Grok API and ask what's being said about this topic on X.
+## 2. Enrich with Grok
 
-```bash
-echo "What are the tweets about this and what is going viral in this context? Include direct links to the most relevant tweets and posts.
+See [Grok-Logic.md](Grok-Logic.md) for the full enrichment prompt, script call, and response handling.
 
-SOURCE METADATA:
-<metadata>
-
-CONTENT:
-<content>" | uv run --project "$PROJECT_DIR" "$PROJECT_DIR/.claude/skills/content-pipeline/scripts/grok-query.py" grok-4-1-fast-reasoning
-```
-
-Replace `<metadata>` with the source metadata (title, author, URL, description) and `<content>` with the full extracted content. The script prints Grok's response to stdout.
-
-`$PROJECT_DIR` is the tc-transcript-bot root directory (set by the bot script as `$TC_PROJECT_DIR`).
+---
 
 ## 3. Generate post option
 
-Using the extracted content, the Grok analysis, and the reference files in this skill directory, generate 1 post option. Read these files before generating:
+**Post structure -- read this before writing:**
 
-- [core-writing-rules.md](core-writing-rules.md) -- banned phrases, dead AI language, writing rules
-- [viral-post-formats.md](viral-post-formats.md) -- 14 post formats and when to use each
-- [facebook-post-containers.md](facebook-post-containers.md) -- two-container architecture (image + caption)
-- [headline-base.md](headline-base.md) -- headline writing with before/after examples
-- [caption-base.md](caption-base.md) -- caption writing rules and structure
+Every post has two containers.
+
+**Image container:** Headline + Body copy. Together they must work as a standalone unit. Someone who never reads the caption should still understand the point. The headline is the viral hook. The body is supporting copy.
+
+**Caption container:** Plain text only. No formatting. Adds authority, evidence, and context the image couldn't hold. Never summarizes what the image already said. Never rescues an image that failed.
+
+Now read these files before writing:
+
+- [Core-Writing-Rules.md](Core-Writing-Rules.md) -- banned phrases, dead AI language, hard rules
+- [Viral-Format-Functions.md](Viral-Format-Functions.md) -- 14 content functions and when to use each
+- [Headline-Writing-Rules.md](Headline-Writing-Rules.md) -- headline writing with before/after examples
+- [Facebook-Caption-Writing-Rules.md](Facebook-Caption-Writing-Rules.md) -- caption writing rules and examples
 
 The post option must contain:
-1. **Format** -- Which viral post format (from `viral-post-formats.md`) best fits this content. Pick the single strongest format.
-2. **Headline** -- The hook. Not "researchers say" but the specific, concrete detail that makes someone click. Think "A scientific study of strippers said" not "A new study found."
-3. **Body copy** -- The post text. Written for Facebook. Conversational but authoritative. Uses the enrichment details from Grok.
+1. **Format** -- Which viral format function best fits this content. Pick the single strongest one.
+2. **Headline** -- The hook. Specific, concrete, no "researchers say." Think finding first, always.
+3. **Body copy** -- Image container text. Written for Facebook. Conversational but authoritative. Uses enrichment details from Grok where they strengthen the post.
+4. **Caption** -- Plain text. Adds authority, evidence, context. Uses the rules in Facebook-Caption-Writing-Rules.md.
+
+---
 
 ## 4. Format and save
 
-Format the full document using [document-format.md](document-format.md). It defines the document structure, filename convention, and output template.
+Format the full document using [Output-Formatting.md](Output-Formatting.md). It defines the document structure, filename convention, and output template.
 
 The document must contain ALL of these sections in order:
-1. Sent by (the sender's name, extracted from the `[Sender: ...]` prefix in the prompt)
-2. Content URL (the original source URL)
-3. Post Option (from step 3)
+1. Sent by
+2. Content URL
+3. Post Option
 4. User Requested Field (OPTIONAL -- only if the sender included extra instructions beyond the URL)
-5. Viral Trends (Grok's response -- tweets and viral context)
-6. Key Data Points (important facts, numbers, names, dates from the content)
-7. Cleaned Transcript (VIDEO ONLY -- skip for articles and tweets)
-8. Raw Content (transcript for video, article text for articles, tweet text for tweets)
+5. Viral Trends (Grok's full response)
+6. Key Data Points
+7. Cleaned Transcript (VIDEO ONLY)
+8. Raw Content
 
 ### Save location
 
@@ -152,7 +150,7 @@ Determine the subdirectory and folder name BEFORE writing the file:
 
 - **SUBDIR**: `Reels` for video sources (Instagram Reels, TikTok), `Articles` for articles and tweets
 - **FOLDER_NAME**: `YYYY-MM-DD-@Handle-concise-slug` (date is today, include @ before handle, 2-4 word slug)
-- **FILENAME**: from [document-format.md](document-format.md) -- `YYYY-MM-DD-username` (lowercase, no @)
+- **FILENAME**: from [Output-Formatting.md](Output-Formatting.md) -- `YYYY-MM-DD-username` (lowercase, no @)
 
 For video: extract username from yt-dlp metadata (.info.json). For articles/tweets: extract from WebFetch output. For articles with no handle, use the publication name or author name.
 
@@ -171,6 +169,8 @@ pandoc "$GDRIVE_TRANSCRIPT_DIR/$SUBDIR/$FOLDER_NAME/$FILENAME.md" \
 ```
 
 All three steps must execute. If pandoc fails, report the error but still keep the .md file.
+
+---
 
 ## 5. Reply
 

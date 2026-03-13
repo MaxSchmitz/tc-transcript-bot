@@ -1,11 +1,11 @@
 ---
-name: core-writing-rules
-description: Core writing rules and banned phrases for all viral Facebook content. Apply these to every post, caption, headline, and image text regardless of content type or function. Trigger automatically on any writing task. These are strong defaults that apply 98% of the time. The fatal construction is the one hard rule with no exceptions.
+name: Core-Writing-Rules
+description: Core writing rules and banned phrases for all viral Facebook content. Apply these to every post, caption, headline, and image text regardless of content type or function. These are not stylistic preferences. They are the difference between copy that reads as human and copy that reads as generated.
 ---
 
 # Core Writing Rules
 
-Apply these to every post. They are not stylistic preferences. They are the difference between copy that reads as human and copy that reads as generated.
+Apply these to every post, every time. No exceptions.
 
 ---
 
@@ -35,6 +35,21 @@ These phrases signal filler. Cut them and connect the sentences directly.
 - "The implications here are"
 - "In other words"
 - "It goes without saying"
+
+---
+
+## Virality Reporting
+
+Never reference viral stats or social performance in body copy. No impressions, no "fans are split," no "went viral on TikTok." The post should trigger sharing, not describe it.
+
+Banned constructions:
+- "pulled X million impressions"
+- "went viral on TikTok / X / Instagram"
+- "fans are divided / split on"
+- "the internet is reacting to"
+- "people can't stop talking about"
+
+Exception: when the story is specifically about a viral moment causing a real-world consequence (someone got fired because a video spread, a law changed because of public pressure from a viral clip).
 
 ---
 
@@ -72,8 +87,6 @@ Banned constructions:
 - "Scientists discovered..." / "Scientists say..."
 - "New data suggests..." / "New research shows..."
 - "According to a study..." / "A report found..."
-
-The test: remove the first clause entirely. If what's left is more interesting than what came before it, the first clause is dead weight.
 
 Wrong: "Researchers followed strippers for 2 cycles and found that ovulating women earned more."
 Right: "Women who were ovulating earned $335 a shift. Women who weren't earned $185. The men had no idea why."
